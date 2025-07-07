@@ -29,11 +29,19 @@ INCLUDE_DIRECTORIES(
 SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/main.c"
 	"${PROJECT_SOURCE_DIR}/src/communication.c"
+	"${PROJECT_SOURCE_DIR}/src/tmp1075n.c"
+	"${PROJECT_SOURCE_DIR}/src/led.c"
+	"${PROJECT_SOURCE_DIR}/src/rmii.c"
+	"${PROJECT_SOURCE_DIR}/src/pcf8523t.c"
 
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/uartbb/uartbb.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/system_timer/system_timer.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/startup/startup_xmc1.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/startup/startup_xmc1400.S"
+	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/spi_fifo/spi_fifo.c"
+	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/i2c_fifo/i2c_fifo.c"
+	"${PROJECT_SOURCE_DIR}/src/bricklib2/os/coop_task.c"
+	"${PROJECT_SOURCE_DIR}/src/bricklib2/os/coop_task_pendsv_handler.S"
 
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/bootloader/bootloader.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/bootloader/bootloader_xmc_irq.c"
@@ -48,6 +56,7 @@ SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc_usic.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc1_scu.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc1_flash.c"
+	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc_i2c.c"
 )
 
 MESSAGE(STATUS "\nFound following source files:\n ${SOURCES}\n")

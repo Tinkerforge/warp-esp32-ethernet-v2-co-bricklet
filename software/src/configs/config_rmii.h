@@ -1,7 +1,7 @@
 /* warp-esp32-ethernet-v2-co-bricklet
  * Copyright (C) 2025 Olaf Lüke <olaf@tinkerforge.com>
  *
- * main.c: Initialization for WARP ESP32 Ethernet 2.0 Co Bricklet
+ * config_rmii.h: Config for RMII driver
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,36 +19,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <stdio.h>
-#include <stdbool.h>
+#ifndef CONFIG_RMII_H
+#define CONFIG_RMII_H
 
-#include "configs/config.h"
+#include "xmc_gpio.h"
 
-#include "bricklib2/bootloader/bootloader.h"
-#include "bricklib2/hal/system_timer/system_timer.h"
-#include "bricklib2/logging/logging.h"
-#include "communication.h"
-#include "tmp1075n.h"
-#include "led.h"
-#include "rmii.h"
-#include "pcf8523t.h"
+#define RMII_INT_PIN P2_9
 
-int main(void) {
-	logging_init();
-	logd("Start WARP ESP32 Ethernet 2.0 Co Bricklet\n\r");
-
-	communication_init();
-	tmp1075n_init();
-	led_init();
-	rmii_init();
-	pcf8523t_init();
-
-	while(true) {
-		bootloader_tick();
-		communication_tick();
-		tmp1075n_tick();
-		led_tick();
-		rmii_tick();
-		pcf8523t_tick();
-	}
-}
+#endif
