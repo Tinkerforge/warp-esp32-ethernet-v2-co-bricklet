@@ -26,12 +26,38 @@
 #include "bricklib2/hal/i2c_fifo/i2c_fifo.h"
 #include "bricklib2/logging/logging.h"
 
+#include "communication.h"
+
 LED led;
 
 void led_init(void) {
 	memset(&led, 0, sizeof(LED));
+	led.state = WARP_ESP32_ETHERNET_V2_CO_LED_STATE_AUTO;
+
+	const XMC_GPIO_CONFIG_t led_config_low = {
+		.mode             = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
+		.output_level     = XMC_GPIO_OUTPUT_LEVEL_LOW,
+	};
+	XMC_GPIO_Init(LED_PIN, &led_config_low);
 }
 
 void led_tick(void) {
-
+	switch(led.state) {
+		case WARP_ESP32_ETHERNET_V2_CO_LED_STATE_OFF: {
+			XMC_GPIO_SetOutputLow(LED_PIN);
+			break;
+		}
+		case WARP_ESP32_ETHERNET_V2_CO_LED_STATE_ON: {
+			XMC_GPIO_SetOutputHigh(LED_PIN);
+			break;
+		}
+		case WARP_ESP32_ETHERNET_V2_CO_LED_STATE_AUTO: {
+			if((system_timer_get_ms() % 1000) < 500) {
+				XMC_GPIO_SetOutputHigh(LED_PIN);
+			} else {
+				XMC_GPIO_SetOutputLow(LED_PIN);
+			}
+			break;
+		}
+	}
 }

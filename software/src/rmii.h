@@ -22,8 +22,12 @@
 #ifndef RMII_H
 #define RMII_H
 
-typedef struct {
+#include <stdint.h>
+#include <stdbool.h>
 
+typedef struct {
+    uint32_t last_low_high_edge;
+    bool is_high;
 } RMII;
 
 extern RMII rmii;

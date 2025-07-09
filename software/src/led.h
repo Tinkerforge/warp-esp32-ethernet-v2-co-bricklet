@@ -22,8 +22,10 @@
 #ifndef LED_H
 #define LED_H
 
-typedef struct {
+#include <stdint.h>
 
+typedef struct {
+    uint8_t state;
 } LED;
 
 extern LED led;

@@ -22,8 +22,26 @@
 #ifndef PCF8523T_H
 #define PCF8523T_H
 
-typedef struct {
+#include <stdint.h>
+#include <stdbool.h>
 
+typedef struct {
+    bool set;
+	uint8_t set_seconds;
+	uint8_t set_minutes;
+	uint8_t set_hours;
+	uint8_t set_days;
+	uint8_t set_days_of_week;
+	uint8_t set_month;
+	uint16_t set_year;
+
+	uint8_t seconds;
+	uint8_t minutes;
+	uint8_t hours;
+	uint8_t days;
+	uint8_t days_of_week;
+	uint8_t month;
+	uint16_t year;
 } PCF8523T;
 
 extern PCF8523T pcf8523t;
