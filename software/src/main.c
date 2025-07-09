@@ -32,6 +32,8 @@
 #include "led.h"
 #include "rmii.h"
 #include "pcf8523t.h"
+#include "watchdog.h"
+#include "sd.h"
 
 int main(void) {
 	logging_init();
@@ -42,6 +44,8 @@ int main(void) {
 	led_init();
 	rmii_init();
 	pcf8523t_init();
+	watchdog_init();
+	sd_init();
 
 	while(true) {
 		bootloader_tick();
@@ -50,5 +54,7 @@ int main(void) {
 		led_tick();
 		rmii_tick();
 		pcf8523t_tick();
+		watchdog_tick();
+		sd_tick();
 	}
 }
