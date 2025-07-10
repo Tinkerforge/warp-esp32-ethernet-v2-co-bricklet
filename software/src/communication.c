@@ -38,11 +38,12 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_GET_TEMPERATURE:    return length != sizeof(GetTemperature)   ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_temperature(message, response);
 		case FID_SET_DATE_TIME:      return length != sizeof(SetDateTime)      ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : set_date_time(message);
 		case FID_GET_DATE_TIME:      return length != sizeof(GetDateTime)      ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_date_time(message, response);
+		case FID_GET_UPTIME:         return length != sizeof(GetUptime)        ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_uptime(message, response);
+		case FID_FORMAT_SD:          return length != sizeof(FormatSD)         ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : format_sd(message, response);
 		case FID_GET_SD_INFORMATION: return length != sizeof(GetSDInformation) ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_sd_information(message, response);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
-
 
 BootloaderHandleMessageResponse set_led(const SetLED *data) {
 	if(data->state > WARP_ESP32_ETHERNET_V2_CO_LED_STATE_AUTO) {
@@ -102,12 +103,24 @@ BootloaderHandleMessageResponse get_date_time(const GetDateTime *data, GetDateTi
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
+BootloaderHandleMessageResponse get_uptime(const GetUptime *data, GetUptime_Response *response) {
+	response->header.length = sizeof(GetUptime_Response);
+	response->uptime        = system_timer_get_ms();
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse format_sd(const FormatSD *data, FormatSD_Response *response) {
+	response->header.length = sizeof(FormatSD_Response);
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
 BootloaderHandleMessageResponse get_sd_information(const GetSDInformation *data, GetSDInformation_Response *response) {
 	response->header.length = sizeof(GetSDInformation_Response);
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
-
 
 
 

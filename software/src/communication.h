@@ -35,6 +35,16 @@ void communication_init(void);
 
 // Constants
 
+#define WARP_ESP32_ETHERNET_V2_CO_DATA_STATUS_OK 0
+#define WARP_ESP32_ETHERNET_V2_CO_DATA_STATUS_SD_ERROR 1
+#define WARP_ESP32_ETHERNET_V2_CO_DATA_STATUS_LFS_ERROR 2
+#define WARP_ESP32_ETHERNET_V2_CO_DATA_STATUS_QUEUE_FULL 3
+#define WARP_ESP32_ETHERNET_V2_CO_DATA_STATUS_DATE_OUT_OF_RANGE 4
+
+#define WARP_ESP32_ETHERNET_V2_CO_FORMAT_STATUS_OK 0
+#define WARP_ESP32_ETHERNET_V2_CO_FORMAT_STATUS_PASSWORD_ERROR 1
+#define WARP_ESP32_ETHERNET_V2_CO_FORMAT_STATUS_FORMAT_ERROR 2
+
 #define WARP_ESP32_ETHERNET_V2_CO_LED_STATE_OFF 0
 #define WARP_ESP32_ETHERNET_V2_CO_LED_STATE_ON 1
 #define WARP_ESP32_ETHERNET_V2_CO_LED_STATE_AUTO 2
@@ -63,9 +73,11 @@ void communication_init(void);
 #define FID_GET_TEMPERATURE 3
 #define FID_SET_DATE_TIME 4
 #define FID_GET_DATE_TIME 5
-#define FID_GET_SD_INFORMATION 6
+#define FID_GET_UPTIME 6
+#define FID_FORMAT_SD 7
+#define FID_GET_SD_INFORMATION 8
 
-#define FID_CALLBACK_RMMI_INTERRUPT 7
+#define FID_CALLBACK_RMMI_INTERRUPT 9
 
 typedef struct {
 	TFPMessageHeader header;
@@ -118,6 +130,25 @@ typedef struct {
 
 typedef struct {
 	TFPMessageHeader header;
+} __attribute__((__packed__)) GetUptime;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t uptime;
+} __attribute__((__packed__)) GetUptime_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t password;
+} __attribute__((__packed__)) FormatSD;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t format_status;
+} __attribute__((__packed__)) FormatSD_Response;
+
+typedef struct {
+	TFPMessageHeader header;
 } __attribute__((__packed__)) GetSDInformation;
 
 typedef struct {
@@ -143,6 +174,8 @@ BootloaderHandleMessageResponse get_led(const GetLED *data, GetLED_Response *res
 BootloaderHandleMessageResponse get_temperature(const GetTemperature *data, GetTemperature_Response *response);
 BootloaderHandleMessageResponse set_date_time(const SetDateTime *data);
 BootloaderHandleMessageResponse get_date_time(const GetDateTime *data, GetDateTime_Response *response);
+BootloaderHandleMessageResponse get_uptime(const GetUptime *data, GetUptime_Response *response);
+BootloaderHandleMessageResponse format_sd(const FormatSD *data, FormatSD_Response *response);
 BootloaderHandleMessageResponse get_sd_information(const GetSDInformation *data, GetSDInformation_Response *response);
 
 // Callbacks
