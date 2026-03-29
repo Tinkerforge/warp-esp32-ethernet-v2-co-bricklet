@@ -19,6 +19,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "configs/config.h"
+
+#ifdef CO_HAS_SDCARD
+
 #include "sd.h"
 
 #include <stdlib.h>
@@ -28,7 +32,6 @@
 #include "bricklib2/os/coop_task.h"
 
 #include "configs/config_sdmmc.h"
-#include "configs/config.h"
 #include "sdmmc.h"
 
 #include "xmc_rtc.h"
@@ -313,3 +316,5 @@ int sd_lfs_prog(const struct lfs_config *c, lfs_block_t block, lfs_off_t off, co
 int sd_lfs_sync(const struct lfs_config *c) {
 	return LFS_ERR_OK;
 }
+
+#endif

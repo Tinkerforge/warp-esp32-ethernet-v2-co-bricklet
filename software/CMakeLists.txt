@@ -23,9 +23,15 @@ INCLUDE_DIRECTORIES(
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/inc/"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/CMSIS/Include/"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/CMSIS/Infineon/XMC1400_series/Include/"
-	"${PROJECT_SOURCE_DIR}/src/bricklib2/warp/wem/littlefs/"
-	"${PROJECT_SOURCE_DIR}/src/bricklib2/warp/wem/"
 )
+
+if(CO_HAS_SDCARD)
+	INCLUDE_DIRECTORIES(
+		"${PROJECT_SOURCE_DIR}/src/bricklib2/warp/wem/littlefs/"
+		"${PROJECT_SOURCE_DIR}/src/bricklib2/warp/wem/"
+	)
+	add_definitions(-DCO_HAS_SDCARD)
+endif()
 
 # find source files
 SET(SOURCES
@@ -36,12 +42,6 @@ SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/rmii.c"
 	"${PROJECT_SOURCE_DIR}/src/pcf8523t.c"
 	"${PROJECT_SOURCE_DIR}/src/watchdog.c"
-	"${PROJECT_SOURCE_DIR}/src/sd.c"
-
-	"${PROJECT_SOURCE_DIR}/src/bricklib2/warp/wem/sdmmc.c"
-
-	"${PROJECT_SOURCE_DIR}/src/bricklib2/warp/wem/littlefs/lfs.c"
-	"${PROJECT_SOURCE_DIR}/src/bricklib2/warp/wem/littlefs/lfs_util.c"
 
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/uartbb/uartbb.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/system_timer/system_timer.c"
@@ -67,6 +67,15 @@ SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc1_flash.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc_i2c.c"
 )
+
+if(CO_HAS_SDCARD)
+	LIST(APPEND SOURCES
+		"${PROJECT_SOURCE_DIR}/src/sd.c"
+		"${PROJECT_SOURCE_DIR}/src/bricklib2/warp/wem/sdmmc.c"
+		"${PROJECT_SOURCE_DIR}/src/bricklib2/warp/wem/littlefs/lfs.c"
+		"${PROJECT_SOURCE_DIR}/src/bricklib2/warp/wem/littlefs/lfs_util.c"
+	)
+endif()
 
 MESSAGE(STATUS "\nFound following source files:\n ${SOURCES}\n")
 

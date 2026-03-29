@@ -22,6 +22,10 @@
 #ifndef SD_H
 #define SD_H
 
+#include "configs/config.h"
+
+#ifdef CO_HAS_SDCARD
+
 #define LFS_NO_MALLOC
 
 #include "lfs.h"
@@ -309,5 +313,12 @@ int sd_lfs_sync(const struct lfs_config *c);
 
 void sd_init(void);
 void sd_tick(void);
+
+#else
+
+static inline void sd_init(void) {}
+static inline void sd_tick(void) {}
+
+#endif
 
 #endif

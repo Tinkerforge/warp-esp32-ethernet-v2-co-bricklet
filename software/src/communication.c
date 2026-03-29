@@ -111,15 +111,11 @@ BootloaderHandleMessageResponse get_uptime(const GetUptime *data, GetUptime_Resp
 }
 
 BootloaderHandleMessageResponse format_sd(const FormatSD *data, FormatSD_Response *response) {
-	response->header.length = sizeof(FormatSD_Response);
-
-	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+	return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 }
 
 BootloaderHandleMessageResponse get_sd_information(const GetSDInformation *data, GetSDInformation_Response *response) {
-	response->header.length = sizeof(GetSDInformation_Response);
-
-	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+	return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 }
 
 
