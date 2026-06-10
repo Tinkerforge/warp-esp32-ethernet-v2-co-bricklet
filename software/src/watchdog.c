@@ -30,11 +30,17 @@ Watchdog watchdog;
 
 void watchdog_init(void) {
 	memset(&watchdog, 0, sizeof(Watchdog));
-		const XMC_GPIO_CONFIG_t config_high = {
-		.mode             = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
-		.output_level     = XMC_GPIO_OUTPUT_LEVEL_LOW,
+
+	const XMC_GPIO_CONFIG_t config_input = {
+		.mode             = XMC_GPIO_MODE_INPUT_TRISTATE,
+		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_LARGE,
 	};
-	XMC_GPIO_Init(ESP_EN_PIN, &config_high);
+
+	const XMC_GPIO_CONFIG_t config_high = {
+		.mode             = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
+		.output_level     = XMC_GPIO_OUTPUT_LEVEL_HIGH,
+	};
+	XMC_GPIO_Init(ESP_EN_PIN, &config_input);
 }
 
 void watchdog_tick(void) {
