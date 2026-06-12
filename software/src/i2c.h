@@ -1,7 +1,7 @@
 /* warp-esp32-ethernet-v2-co-bricklet
- * Copyright (C) 2025 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2026 Olaf Lüke <olaf@tinkerforge.com>
  *
- * pcf8523t.h: Driver for PCF8523T
+ * i2c.h: Shared I2C bus (TMP1075N + PCF85263) with simple owner arbitration
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,34 +19,29 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef PCF8523T_H
-#define PCF8523T_H
+#ifndef I2C_H
+#define I2C_H
 
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "bricklib2/hal/i2c_fifo/i2c_fifo.h"
+
+typedef enum {
+	I2C_OWNER_NONE = 0,
+	I2C_OWNER_TMP1075N,
+	I2C_OWNER_PCF85263,
+} I2COwner;
+
 typedef struct {
-    bool set;
-	uint8_t set_seconds;
-	uint8_t set_minutes;
-	uint8_t set_hours;
-	uint8_t set_days;
-	uint8_t set_days_of_week;
-	uint8_t set_month;
-	uint16_t set_year;
+	I2CFifo i2c_fifo;
+	I2COwner owner;
+} I2C;
 
-	uint8_t seconds;
-	uint8_t minutes;
-	uint8_t hours;
-	uint8_t days;
-	uint8_t days_of_week;
-	uint8_t month;
-	uint16_t year;
-} PCF8523T;
+extern I2C i2c;
 
-extern PCF8523T pcf8523t;
-
-void pcf8523t_tick(void);
-void pcf8523t_init(void);
+void i2c_init(void);
+bool i2c_claim(const I2COwner owner, const uint8_t address);
+void i2c_release(const I2COwner owner);
 
 #endif

@@ -26,7 +26,7 @@
 #include "bricklib2/hal/system_timer/system_timer.h"
 
 #include "led.h"
-#include "pcf8523t.h"
+#include "pcf85263.h"
 #include "tmp1075n.h"
 #include "rmii.h"
 
@@ -70,35 +70,35 @@ BootloaderHandleMessageResponse get_temperature(const GetTemperature *data, GetT
 }
 
 BootloaderHandleMessageResponse set_date_time(const SetDateTime *data) {
-	pcf8523t.set              = true;
-	pcf8523t.set_seconds      = data->seconds;
-	pcf8523t.set_minutes      = data->minutes;
-	pcf8523t.set_hours        = data->hours;
-	pcf8523t.set_days         = data->days;
-	pcf8523t.set_days_of_week = data->days_of_week;
-	pcf8523t.set_month        = data->month;
-	pcf8523t.set_year         = data->year;
+	pcf85263.set              = true;
+	pcf85263.set_seconds      = data->seconds;
+	pcf85263.set_minutes      = data->minutes;
+	pcf85263.set_hours        = data->hours;
+	pcf85263.set_days         = data->days;
+	pcf85263.set_days_of_week = data->days_of_week;
+	pcf85263.set_month        = data->month;
+	pcf85263.set_year         = data->year;
 
-	pcf8523t.seconds          = data->seconds;
-	pcf8523t.minutes          = data->minutes;
-	pcf8523t.hours            = data->hours;
-	pcf8523t.days             = data->days;
-	pcf8523t.days_of_week     = data->days_of_week;
-	pcf8523t.month            = data->month;
-	pcf8523t.year             = data->year;
+	pcf85263.seconds          = data->seconds;
+	pcf85263.minutes          = data->minutes;
+	pcf85263.hours            = data->hours;
+	pcf85263.days             = data->days;
+	pcf85263.days_of_week     = data->days_of_week;
+	pcf85263.month            = data->month;
+	pcf85263.year             = data->year;
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
 BootloaderHandleMessageResponse get_date_time(const GetDateTime *data, GetDateTime_Response *response) {
 	response->header.length = sizeof(GetDateTime_Response);
-	response->seconds       = pcf8523t.seconds;
-	response->minutes       = pcf8523t.minutes;
-	response->hours         = pcf8523t.hours;
-	response->days          = pcf8523t.days;
-	response->days_of_week  = pcf8523t.days_of_week;
-	response->month         = pcf8523t.month;
-	response->year          = pcf8523t.year;
+	response->seconds       = pcf85263.seconds;
+	response->minutes       = pcf85263.minutes;
+	response->hours         = pcf85263.hours;
+	response->days          = pcf85263.days;
+	response->days_of_week  = pcf85263.days_of_week;
+	response->month         = pcf85263.month;
+	response->year          = pcf85263.year;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }

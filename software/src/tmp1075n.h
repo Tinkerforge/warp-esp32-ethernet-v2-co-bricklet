@@ -22,10 +22,9 @@
 #ifndef TMP1075N_H
 #define TMP1075N_H
 
-#include "bricklib2/hal/i2c_fifo/i2c_fifo.h"
+#include <stdint.h>
 
 typedef struct {
-	I2CFifo i2c_fifo;
 	int16_t temperature;
 
 	uint32_t last_read;

@@ -28,10 +28,11 @@
 #include "bricklib2/hal/system_timer/system_timer.h"
 #include "bricklib2/logging/logging.h"
 #include "communication.h"
+#include "i2c.h"
 #include "tmp1075n.h"
 #include "led.h"
 #include "rmii.h"
-#include "pcf8523t.h"
+#include "pcf85263.h"
 #include "watchdog.h"
 #include "sd.h"
 
@@ -40,10 +41,11 @@ int main(void) {
 	logd("Start WARP ESP32 Ethernet 2.0 Co Bricklet\n\r");
 
 	communication_init();
+	i2c_init();
 	tmp1075n_init();
 	led_init();
 	rmii_init();
-	pcf8523t_init();
+	pcf85263_init();
 	watchdog_init();
 	sd_init();
 
@@ -53,7 +55,7 @@ int main(void) {
 		tmp1075n_tick();
 		led_tick();
 		rmii_tick();
-		pcf8523t_tick();
+		pcf85263_tick();
 		watchdog_tick();
 		sd_tick();
 	}

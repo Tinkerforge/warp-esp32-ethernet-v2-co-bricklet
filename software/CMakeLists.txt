@@ -37,10 +37,11 @@ endif()
 SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/main.c"
 	"${PROJECT_SOURCE_DIR}/src/communication.c"
+	"${PROJECT_SOURCE_DIR}/src/i2c.c"
 	"${PROJECT_SOURCE_DIR}/src/tmp1075n.c"
 	"${PROJECT_SOURCE_DIR}/src/led.c"
 	"${PROJECT_SOURCE_DIR}/src/rmii.c"
-	"${PROJECT_SOURCE_DIR}/src/pcf8523t.c"
+	"${PROJECT_SOURCE_DIR}/src/pcf85263.c"
 	"${PROJECT_SOURCE_DIR}/src/watchdog.c"
 
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/uartbb/uartbb.c"

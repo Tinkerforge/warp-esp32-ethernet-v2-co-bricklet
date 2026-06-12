@@ -22,28 +22,8 @@
 #ifndef CONFIG_TMP1075N_H
 #define CONFIG_TMP1075N_H
 
-#include "xmc_gpio.h"
-#include "xmc_i2c.h"
+// The TMP1075N shares the I2C bus with the PCF85263.
 
-#define TMP1075N_I2C_BAUDRATE         100000
-
-#define TMP1075N_I2C_ADDRESS          0b1001001
-#define TMP1075N_I2C                  XMC_I2C0_CH1
-
-#define TMP1075N_SCL_PORT             XMC_GPIO_PORT2
-#define TMP1075N_SCL_PIN              11
-#define TMP1075N_SCL_PIN_MODE         XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT6
-#define TMP1075N_SCL_INPUT            XMC_USIC_CH_INPUT_DX1
-#define TMP1075N_SCL_SOURCE           4 // DX1E
-#define TMP1075N_SCL_FIFO_SIZE        XMC_USIC_CH_FIFO_SIZE_16WORDS
-#define TMP1075N_SCL_FIFO_POINTER     32
-
-#define TMP1075N_SDA_PORT             XMC_GPIO_PORT2
-#define TMP1075N_SDA_PIN              10
-#define TMP1075N_SDA_PIN_MODE         XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT7
-#define TMP1075N_SDA_INPUT            XMC_USIC_CH_INPUT_DX0
-#define TMP1075N_SDA_SOURCE           5 // DX0F
-#define TMP1075N_SDA_FIFO_SIZE        XMC_USIC_CH_FIFO_SIZE_16WORDS
-#define TMP1075N_SDA_FIFO_POINTER     48
+#define TMP1075N_I2C_ADDRESS 0b1001001
 
 #endif

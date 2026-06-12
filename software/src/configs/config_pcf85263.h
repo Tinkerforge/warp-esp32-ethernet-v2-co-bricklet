@@ -1,7 +1,7 @@
 /* warp-esp32-ethernet-v2-co-bricklet
- * Copyright (C) 2025 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2026 Olaf Lüke <olaf@tinkerforge.com>
  *
- * config_pcf8523t.h: Config for PCF8523T driver
+ * config_pcf85263.h: Config for PCF85263 driver
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,11 +19,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef CONFIG_PCF8523T_H
-#define CONFIG_PCF8523T_H
+#ifndef CONFIG_PCF85263_H
+#define CONFIG_PCF85263_H
 
-// Reuse TMP1075N I2C configuration for PCF8523T (same i2c bus)
+// The PCF85263 shares the I2C bus with the TMP1075N.
 
-#define PCF8523T_I2C_ADDRESS 0b1101000
+#define PCF85263_I2C_ADDRESS 0b1010001 // 0x51
 
 #endif
