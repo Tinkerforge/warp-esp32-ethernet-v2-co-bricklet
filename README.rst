@@ -3,9 +3,7 @@ WARP ESP32 Ethernet 2.0 Co Bricklet
 
 This repository contains the firmware source code for the co-processor
 of the WARP ESP32 Ethernet Brick 2.0 (the main controller board of the
-WARP4 Charger). The co-processor handles the real-time and I/O tasks of
-the Brick. The documentation generator configs can be found at
-https://github.com/Tinkerforge/generators
+WARP4 Charger).
 
 .. BEGIN WARP REPOSITORIES (managed block, generated from esp32-firmware/repo_overview.rst - do not edit by hand, run update_repo_overview.py instead)
 
