@@ -65,6 +65,19 @@ static void pcf85263_reset(void) {
 	pcf85263.last_get = system_timer_get_ms();
 }
 
+static void pcf85263_fail(void) {
+	pcf85263.error_count++;
+	if(pcf85263.error_count >= PCF85263_MAX_ERRORS) {
+		loge("PCF85263 disabled after %d consecutive I2C errors\n\r", pcf85263.error_count);
+		pcf85263.disabled  = true;
+		// Hand the shared bus back so the TMP1075N can keep using it.
+		i2c.i2c_fifo.state = I2C_FIFO_STATE_IDLE;
+		i2c_release(I2C_OWNER_PCF85263);
+	} else {
+		pcf85263_reset();
+	}
+}
+
 void pcf85263_init(void) {
 	memset(&pcf85263, 0, sizeof(PCF85263));
 
@@ -73,6 +86,10 @@ void pcf85263_init(void) {
 }
 
 void pcf85263_tick(void) {
+	if(pcf85263.disabled) {
+		return;
+	}
+
 	if((i2c.owner != I2C_OWNER_NONE) && (i2c.owner != I2C_OWNER_PCF85263)) {
 		return;
 	}
@@ -82,13 +99,13 @@ void pcf85263_tick(void) {
 	// An operation did not finish within 60 seconds
 	if(system_timer_is_time_elapsed_ms(pcf85263.last_get, 60*1000)) {
 		loge("PCF85263 I2C timeout: %d\n\r", state);
-		pcf85263_reset();
+		pcf85263_fail();
 		return;
 	}
 
 	if(state & I2C_FIFO_STATE_ERROR) {
 		loge("PCF85263 I2C error: %d\n\r", state);
-		pcf85263_reset();
+		pcf85263_fail();
 		return;
 	}
 
@@ -98,9 +115,11 @@ void pcf85263_tick(void) {
 			uint8_t length = i2c_fifo_read_fifo(&i2c.i2c_fifo, data, 16);
 			if(length != 8) {
 				loge("PCF85263 unexpected I2C read length: %d\n\r", length);
-				pcf85263_reset();
+				pcf85263_fail();
 				return;
 			}
+
+			pcf85263.error_count = 0;
 
 			// Don't overwrite the visible date/time while a set is pending,
 			// otherwise we would replace the just-set value with a stale read.
@@ -122,6 +141,8 @@ void pcf85263_tick(void) {
 		}
 
 		case I2C_FIFO_STATE_WRITE_REGISTER_READY: {
+			pcf85263.error_count = 0;
+
 			switch(pcf85263.state) {
 				case PCF85263_STATE_INIT_OSCILLATOR: {
 					pcf85263.state = PCF85263_STATE_INIT_FUNCTION;
@@ -154,7 +175,7 @@ void pcf85263_tick(void) {
 
 				default: {
 					loge("PCF85263 unrecognized write state: %d\n\r", pcf85263.state);
-					pcf85263_reset();
+					pcf85263_fail();
 					return;
 				}
 			}
@@ -170,7 +191,7 @@ void pcf85263_tick(void) {
 			// If we end up in a ready state that we don't handle, something went wrong
 			if(state & I2C_FIFO_STATE_READY) {
 				loge("PCF85263 unrecognized I2C ready state: %d\n\r", state);
-				pcf85263_reset();
+				pcf85263_fail();
 			}
 			return;
 		}

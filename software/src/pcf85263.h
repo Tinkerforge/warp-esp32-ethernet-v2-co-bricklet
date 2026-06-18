@@ -39,6 +39,9 @@ typedef struct {
 	PCF85263State state;
 	uint32_t last_get;
 
+	uint32_t error_count;
+	bool disabled;
+
 	bool set;
 	uint8_t set_seconds;
 	uint8_t set_minutes;

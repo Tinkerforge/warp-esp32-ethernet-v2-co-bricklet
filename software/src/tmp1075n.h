@@ -23,11 +23,15 @@
 #define TMP1075N_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef struct {
 	int16_t temperature;
 
 	uint32_t last_read;
+
+	uint32_t error_count;
+	bool disabled;
 } TMP1075N;
 
 extern TMP1075N tmp1075n;

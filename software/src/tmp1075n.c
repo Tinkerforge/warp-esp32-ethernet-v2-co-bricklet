@@ -35,7 +35,25 @@ void tmp1075n_init(void) {
 	tmp1075n.last_read = system_timer_get_ms();
 }
 
+static void tmp1075n_fail(void) {
+	tmp1075n.error_count++;
+	if(tmp1075n.error_count >= TMP1075N_MAX_ERRORS) {
+		loge("TMP1075N disabled after %d consecutive I2C errors\n\r", tmp1075n.error_count);
+		tmp1075n.disabled  = true;
+		// Hand the shared bus back so the PCF85263 can keep using it.
+		i2c.i2c_fifo.state = I2C_FIFO_STATE_IDLE;
+		i2c_release(I2C_OWNER_TMP1075N);
+	} else {
+		i2c_init();
+		tmp1075n.last_read = system_timer_get_ms();
+	}
+}
+
 void tmp1075n_tick(void) {
+	if(tmp1075n.disabled) {
+		return;
+	}
+
 	if((i2c.owner != I2C_OWNER_NONE) && (i2c.owner != I2C_OWNER_TMP1075N)) {
 		return;
 	}
@@ -45,15 +63,13 @@ void tmp1075n_tick(void) {
 	// A read did not finish within 60 seconds
 	if(system_timer_is_time_elapsed_ms(tmp1075n.last_read, 60*1000)) {
 		loge("TMP1075N I2C timeout: %d\n\r", state);
-		i2c_init();
-		tmp1075n.last_read = system_timer_get_ms();
+		tmp1075n_fail();
 		return;
 	}
 
 	if(state & I2C_FIFO_STATE_ERROR) {
 		loge("TMP1075N I2C error: %d\n\r", state);
-		i2c_init();
-		tmp1075n.last_read = system_timer_get_ms();
+		tmp1075n_fail();
 		return;
 	}
 
@@ -63,10 +79,11 @@ void tmp1075n_tick(void) {
 			uint8_t length = i2c_fifo_read_fifo(&i2c.i2c_fifo, buffer, 16);
 			if(length != 2) {
 				loge("TMP1075N I2C unexpected read length : %d\n\r", length);
-				i2c_init();
-				tmp1075n.last_read = system_timer_get_ms();
-				break;
+				tmp1075n_fail();
+				return;
 			}
+
+			tmp1075n.error_count = 0;
 
 			int16_t value = ((buffer[0] << 8) | buffer[1]) >> 4;
 			// 12-bit to 16-bit two-complement
@@ -91,8 +108,7 @@ void tmp1075n_tick(void) {
 			// If we end up in a ready state that we don't handle, something went wrong
 			if(state & I2C_FIFO_STATE_READY) {
 				loge("TMP1075N I2C unrecognized ready state : %d\n\r", state);
-				i2c_init();
-				tmp1075n.last_read = system_timer_get_ms();
+				tmp1075n_fail();
 			}
 			return;
 		}

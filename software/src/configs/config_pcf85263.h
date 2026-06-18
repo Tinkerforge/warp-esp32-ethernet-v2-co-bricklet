@@ -25,5 +25,6 @@
 // The PCF85263 shares the I2C bus with the TMP1075N.
 
 #define PCF85263_I2C_ADDRESS 0b1010001 // 0x51
+#define PCF85263_MAX_ERRORS  10
 
 #endif
