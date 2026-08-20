@@ -4,5 +4,5 @@
 2026-05-19: 2.0.1 (cfd734df)
 - Improve I2C error handling
 
-2026-08-20: 2.0.2 (TBD)
+2026-08-20: 2.0.2 (b4383a08)
 - Turn RMMI callback off for now, until needed
