@@ -119,8 +119,10 @@ BootloaderHandleMessageResponse get_sd_information(const GetSDInformation *data,
 }
 
 
+#define USE_RMMI_INTERRUPT_CALLBACK 0
 
 bool handle_rmmi_interrupt_callback(void) {
+#if USE_RMMI_INTERRUPT_CALLBACK
 	static bool is_buffered = false;
 	static RMMIInterrupt_Callback cb;
 
@@ -145,14 +147,19 @@ bool handle_rmmi_interrupt_callback(void) {
 	} else {
 		is_buffered = true;
 	}
+#endif
 
 	return false;
 }
 
 void communication_tick(void) {
+#if USE_RMMI_INTERRUPT_CALLBACK
 	communication_callback_tick();
+#endif
 }
 
 void communication_init(void) {
+#if USE_RMMI_INTERRUPT_CALLBACK
 	communication_callback_init();
+#endif
 }
